@@ -10,7 +10,7 @@ roomsize=9,7
 Exercise1.wall=0
 Exercise1.door=1
 Exercise1.walkable=2
-AdditionalLib.Pit=3
+ExternalLib.Pit=3
 [end]
 
 ##these numbers relate to the block definitions.

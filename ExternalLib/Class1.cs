@@ -7,31 +7,20 @@ namespace ExternalLib
 {
     public class MyExternalClass
     {
-        public static string LoadFile()
+        public static object[,] LoadFile()
         {
+            object[,] obj = new object[0, 0];
             string path = "room";
             path += ".txt";
 
-            //using (FileStream file = File.OpenRead(path))
-            //{
-            //    byte[] b = new byte[1024];
-            //    UTF8Encoding temp = new UTF8Encoding(true);
-
-            //    while (file.Read(b,0,b.Length) > 0)
-            //    {
-            //        Console.WriteLine(temp.GetString(b));
-
-            //    }
-            //}
             StreamReader reader = File.OpenText(path);
             string line;
+
             string definitions = @"\b[\D+]\b([0-9]?,?[0-9]+)";
             Regex defRgx = new Regex(definitions);
 
             List<int> map = new List<int>();
-            int[,] maps = new int[0, 0];
 
-            string match = "";
 
             while ((line = reader.ReadLine()) != null)
             {
@@ -41,16 +30,21 @@ namespace ExternalLib
                     {
                         line = reader.ReadLine();
 
+                        string[] results = Array.Empty<string>();
+
                         while (!line.StartsWith("[end]"))
                         {
                             char[] delimiter = { ',', '=' };
 
                             string result = defRgx.Match(line).ToString();
-                            string[] results = result.Split(delimiter);
+                            results = result.Split(delimiter);
 
                             Console.WriteLine(String.Join("", results));
                             line = reader.ReadLine();
                         }
+                        int.TryParse(results[1], out int width);
+                        int.TryParse(results[2], out int height);
+                        obj = new object[width, height];
                     }
                     if (line.StartsWith("[block definitions"))
                     {
@@ -70,6 +64,7 @@ namespace ExternalLib
                     if (line.StartsWith("[room definitions]"))
                     {
                         line = reader.ReadLine();
+                        int row = 0;
 
                         while (!line.StartsWith("[end]"))
                         {
@@ -78,16 +73,23 @@ namespace ExternalLib
 
                             for (int i = 0; i < line.Length; ++i)
                             {
-                                map.Add(line[i]);
+                                obj[i,row] = result[i];
                             }
 
                             Console.WriteLine(result);
                             line = reader.ReadLine();
+
+                            row++;
                         }
                     }
                 }
             }
-            return match;
+            return obj;
+        }
+
+        public string Serializer()
+        {
+            return "";
         }
     }
 }

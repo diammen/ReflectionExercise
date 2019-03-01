@@ -21,13 +21,10 @@ namespace AssemblyExer
         {
 
         }
-        class MapData
-        {
-            int blockCount = 0;
-            int[] roomsize;
-        }
         static void Main(string[] args)
         {
+            object[,] data = new object[0,0];
+
             //This first section cache's the various strings we'll be using
             //this helps demonstrate that the classes & methods can all
             //be entirely data driven.
@@ -49,7 +46,7 @@ namespace AssemblyExer
             object obj = Activator.CreateInstance(typ);
 
             //And invoke the method
-            meth.Invoke(obj, null);
+            data = (object[,])meth.Invoke(obj, null);
             Console.ReadLine();//Wait for random keyboard input & CR
         }
     }
